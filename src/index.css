@@ -1,42 +1,73 @@
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-/* Definition of the design system. All colors, gradients, fonts, etc should be defined here. 
-All colors MUST be HSL.
-*/
+/* Gemstone-inspired design system with luxury aesthetics */
 
 @layer base {
   :root {
+    /* Base colors */
     --background: 0 0% 100%;
     --foreground: 222.2 84% 4.9%;
 
+    /* Card colors */
     --card: 0 0% 100%;
     --card-foreground: 222.2 84% 4.9%;
 
+    /* Popover colors */
     --popover: 0 0% 100%;
     --popover-foreground: 222.2 84% 4.9%;
 
-    --primary: 222.2 47.4% 11.2%;
-    --primary-foreground: 210 40% 98%;
+    /* Primary - Deep Sapphire Blue */
+    --primary: 220 91% 25%;
+    --primary-foreground: 0 0% 98%;
+    --primary-hover: 220 91% 30%;
 
-    --secondary: 210 40% 96.1%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
+    /* Secondary - Elegant Gold */
+    --secondary: 45 93% 47%;
+    --secondary-foreground: 222.2 84% 4.9%;
+    --secondary-hover: 45 93% 52%;
 
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
+    /* Accent - Rich Emerald */
+    --accent: 140 84% 25%;
+    --accent-foreground: 0 0% 98%;
+    --accent-hover: 140 84% 30%;
 
-    --accent: 210 40% 96.1%;
-    --accent-foreground: 222.2 47.4% 11.2%;
+    /* Ruby Red for highlights */
+    --ruby: 0 84% 45%;
+    --ruby-foreground: 0 0% 98%;
+
+    /* Neutral tones */
+    --muted: 220 14.3% 95.9%;
+    --muted-foreground: 220 8.9% 46.1%;
 
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 210 40% 98%;
 
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 222.2 84% 4.9%;
+    --border: 220 13% 91%;
+    --input: 220 13% 91%;
+    --ring: 220 91% 25%;
 
-    --radius: 0.5rem;
+    --radius: 0.75rem;
+
+    /* Gemstone gradients */
+    --gradient-emerald: linear-gradient(135deg, hsl(140 84% 25%), hsl(140 84% 35%));
+    --gradient-sapphire: linear-gradient(135deg, hsl(220 91% 25%), hsl(220 91% 35%));
+    --gradient-ruby: linear-gradient(135deg, hsl(0 84% 45%), hsl(0 84% 55%));
+    --gradient-gold: linear-gradient(135deg, hsl(45 93% 47%), hsl(45 93% 57%));
+    --gradient-hero: linear-gradient(135deg, hsl(220 91% 25%) 0%, hsl(140 84% 25%) 50%, hsl(45 93% 47%) 100%);
+
+    /* Shadows with gemstone colors */
+    --shadow-emerald: 0 10px 25px -3px hsl(140 84% 25% / 0.1), 0 4px 6px -2px hsl(140 84% 25% / 0.05);
+    --shadow-sapphire: 0 10px 25px -3px hsl(220 91% 25% / 0.1), 0 4px 6px -2px hsl(220 91% 25% / 0.05);
+    --shadow-ruby: 0 10px 25px -3px hsl(0 84% 45% / 0.1), 0 4px 6px -2px hsl(0 84% 45% / 0.05);
+    --shadow-luxury: 0 25px 50px -12px hsl(220 91% 25% / 0.25);
+
+    /* Animation variables */
+    --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    --transition-bounce: all 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
 
     --sidebar-background: 0 0% 98%;
 
@@ -100,6 +131,89 @@ All colors MUST be HSL.
   }
 
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-foreground font-inter antialiased;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-playfair;
+  }
+}
+
+@layer components {
+  /* Gemstone-themed button variants */
+  .btn-emerald {
+    @apply bg-gradient-to-r from-emerald-700 to-emerald-600 text-emerald-foreground hover:from-emerald-800 hover:to-emerald-700 shadow-lg transition-all duration-300 transform hover:scale-105;
+  }
+
+  .btn-sapphire {
+    @apply bg-gradient-to-r from-blue-800 to-blue-700 text-blue-50 hover:from-blue-900 hover:to-blue-800 shadow-lg transition-all duration-300 transform hover:scale-105;
+  }
+
+  .btn-ruby {
+    @apply bg-gradient-to-r from-red-700 to-red-600 text-red-50 hover:from-red-800 hover:to-red-700 shadow-lg transition-all duration-300 transform hover:scale-105;
+  }
+
+  .btn-gold {
+    @apply bg-gradient-to-r from-yellow-600 to-yellow-500 text-yellow-900 hover:from-yellow-700 hover:to-yellow-600 shadow-lg transition-all duration-300 transform hover:scale-105;
+  }
+
+  /* Product card hover effects */
+  .product-card {
+    @apply bg-card rounded-lg overflow-hidden shadow-md hover:shadow-xl transition-all duration-500 transform hover:-translate-y-2 hover:scale-[1.02] border border-border/50;
+  }
+
+  .product-image {
+    @apply w-full h-48 object-cover transition-transform duration-700 ease-out;
+  }
+
+  .product-card:hover .product-image {
+    @apply scale-110;
+  }
+
+  /* Parallax hero section */
+  .hero-parallax {
+    @apply relative overflow-hidden;
+    background: var(--gradient-hero);
+  }
+
+  .hero-parallax::before {
+    content: '';
+    @apply absolute inset-0 bg-gradient-to-b from-transparent via-black/20 to-black/40;
+  }
+
+  /* Filter animation */
+  .filter-slide {
+    @apply transform transition-all duration-300 ease-in-out;
+  }
+
+  .filter-slide.active {
+    @apply translate-x-0 opacity-100;
+  }
+
+  .filter-slide.inactive {
+    @apply -translate-x-full opacity-0;
+  }
+
+  /* Gemstone shimmer effect */
+  .gemstone-shimmer {
+    @apply relative overflow-hidden;
+  }
+
+  .gemstone-shimmer::after {
+    content: '';
+    @apply absolute top-0 -left-full w-full h-full bg-gradient-to-r from-transparent via-white/20 to-transparent transform skew-x-12 transition-transform duration-1000;
+  }
+
+  .gemstone-shimmer:hover::after {
+    @apply translate-x-full;
+  }
+
+  /* Typography classes */
+  .text-luxury {
+    @apply font-playfair font-semibold tracking-wide;
+  }
+
+  .text-elegant {
+    @apply font-inter font-medium tracking-tight;
   }
 }
