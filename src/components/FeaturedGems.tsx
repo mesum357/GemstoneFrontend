@@ -1,11 +1,44 @@
-import { Button } from "@/components/ui/button";
+import { useState, useEffect } from "react";
 import { Badge } from "@/components/ui/badge";
 import ProductCard from "./ProductCard";
-import { mockProducts } from "@/data/mockProducts";
-import { ArrowRight } from "lucide-react";
+import { Loader2 } from "lucide-react";
+
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000/api';
+
+interface Product {
+  _id: string;
+  name: string;
+  productType: 'Shilajit' | 'Gemstone';
+  image: string;
+  description: string;
+  category: string;
+  featured: boolean;
+}
 
 const FeaturedGems = () => {
-  const featuredProducts = mockProducts.slice(0, 6);
+  const [products, setProducts] = useState<Product[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    fetchFeaturedProducts();
+  }, []);
+
+  const fetchFeaturedProducts = async () => {
+    try {
+      setLoading(true);
+      // Fetch non-featured gemstones
+      const response = await fetch(`${API_URL}/products?productType=Gemstone&featured=false`);
+      
+      if (response.ok) {
+        const data = await response.json();
+        setProducts(data.products || []);
+      }
+    } catch (error) {
+      console.error('Error fetching products:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <section className="py-20 bg-gradient-to-b from-background to-muted/30">
@@ -24,35 +57,24 @@ const FeaturedGems = () => {
           </p>
         </div>
 
-        {/* Categories */}
-        <div className="flex flex-wrap justify-center gap-4 mb-12">
-          {["All", "Ruby", "Sapphire", "Emerald", "Aquamarine", "Tourmaline"].map((category) => (
-            <Button
-              key={category}
-              variant={category === "All" ? "default" : "outline"}
-              className={category === "All" ? "btn-emerald" : "hover:btn-sapphire"}
-            >
-              {category}
-            </Button>
-          ))}
-        </div>
-
         {/* Product Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
-          {featuredProducts.map((product) => (
-            <div key={product.id} className="animate-fade-in-up">
-              <ProductCard product={product} />
-            </div>
-          ))}
-        </div>
-
-        {/* View All Button */}
-        <div className="text-center">
-          <Button size="lg" className="btn-sapphire px-8 py-4 rounded-full">
-            View All Gemstones
-            <ArrowRight className="w-5 h-5 ml-2" />
-          </Button>
-        </div>
+        {loading ? (
+          <div className="flex items-center justify-center py-20">
+            <Loader2 className="h-8 w-8 animate-spin text-primary" />
+          </div>
+        ) : products.length === 0 ? (
+          <div className="text-center py-20 text-muted-foreground">
+            No featured gemstones available at the moment.
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
+            {products.map((product) => (
+              <div key={product._id} className="animate-fade-in-up">
+                <ProductCard product={product} />
+              </div>
+            ))}
+          </div>
+        )}
       </div>
     </section>
   );
