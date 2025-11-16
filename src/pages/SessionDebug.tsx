@@ -42,12 +42,19 @@ interface SessionInfo {
     type: string;
   };
   timestamp: string;
+  setCookieHeader?: string;
+  responseHeaders?: {
+    'Set-Cookie': number;
+    'Access-Control-Allow-Credentials': string | null;
+    'Access-Control-Allow-Origin': string | null;
+  };
   sessionData?: {
     cookie: {
       originalMaxAge: number;
       httpOnly: boolean;
       secure: boolean;
       sameSite: string;
+      path?: string;
     } | null;
   };
 }
@@ -272,6 +279,21 @@ const SessionDebug = () => {
                 <CardDescription>Session cookie configuration and status</CardDescription>
               </CardHeader>
               <CardContent className="space-y-4">
+                {sessionInfo.setCookieHeader && (
+                  <div className="mb-4 p-3 bg-muted rounded-md">
+                    <p className="text-sm font-medium text-muted-foreground mb-2">Set-Cookie Header (From Server)</p>
+                    {sessionInfo.setCookieHeader === 'Not Set - This is the problem!' ? (
+                      <div className="flex items-center gap-2 text-red-600">
+                        <AlertCircle className="w-4 h-4" />
+                        <p className="font-medium text-sm">⚠️ Cookie is NOT being set by server!</p>
+                      </div>
+                    ) : (
+                      <div className="bg-background p-2 rounded border">
+                        <p className="font-mono text-xs break-all">{sessionInfo.setCookieHeader}</p>
+                      </div>
+                    )}
+                  </div>
+                )}
                 <div>
                   <p className="text-sm font-medium text-muted-foreground mb-2">Cookie Name</p>
                   <p className="font-mono text-sm">{sessionInfo.cookieName}</p>
@@ -420,6 +442,32 @@ const SessionDebug = () => {
                 </div>
               </CardContent>
             </Card>
+
+            {/* Response Headers */}
+            {sessionInfo.responseHeaders && (
+              <Card>
+                <CardHeader>
+                  <CardTitle>Response Headers</CardTitle>
+                  <CardDescription>CORS and cookie-related response headers</CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <div className="space-y-3">
+                    <div>
+                      <p className="text-sm font-medium text-muted-foreground mb-1">Set-Cookie Headers Count</p>
+                      <p className="text-sm">{sessionInfo.responseHeaders['Set-Cookie'] || 0}</p>
+                    </div>
+                    <div>
+                      <p className="text-sm font-medium text-muted-foreground mb-1">Access-Control-Allow-Credentials</p>
+                      <p className="text-sm">{sessionInfo.responseHeaders['Access-Control-Allow-Credentials'] || 'Not Set'}</p>
+                    </div>
+                    <div>
+                      <p className="text-sm font-medium text-muted-foreground mb-1">Access-Control-Allow-Origin</p>
+                      <p className="text-sm font-mono break-all">{sessionInfo.responseHeaders['Access-Control-Allow-Origin'] || 'Not Set'}</p>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            )}
 
             {/* Session History */}
             {sessionHistory.length > 0 && (
