@@ -7,7 +7,7 @@ import { ChevronDown, Award, Leaf, Mountain, Loader2 } from "lucide-react";
 import ProductCard from "@/components/ProductCard";
 import heroImage from "@/assets/hero-gemstones.jpg";
 
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000/api';
+import { API_URL } from '@/utils/api';
 
 interface Product {
   _id: string;

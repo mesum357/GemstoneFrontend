@@ -3,7 +3,7 @@ import { Badge } from "@/components/ui/badge";
 import { Loader2 } from "lucide-react";
 import ProductCard from "./ProductCard";
 
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000/api';
+import { API_URL } from '@/utils/api';
 
 interface Product {
   _id: string;

@@ -22,9 +22,9 @@ interface AuthContextType {
   isAuthenticated: boolean;
 }
 
-const AuthContext = createContext<AuthContextType | undefined>(undefined);
+import { API_URL } from '@/utils/api';
 
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000/api';
+const AuthContext = createContext<AuthContextType | undefined>(undefined);
 const SESSION_STORAGE_KEY = 'vitalgeo_user_session';
 const SESSION_VALIDATION_INTERVAL = 5 * 60 * 1000; // 5 minutes
 const SESSION_MAX_AGE = 14 * 24 * 60 * 60 * 1000; // 14 days

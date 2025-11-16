@@ -12,7 +12,7 @@ import { useCurrency } from "@/hooks/useCurrency";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000/api';
+import { API_URL } from '@/utils/api';
 
 interface PaymentSettings {
   _id?: string;
