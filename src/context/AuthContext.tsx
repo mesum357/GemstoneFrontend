@@ -139,7 +139,11 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   // Initialize: check auth status on mount
   useEffect(() => {
-    checkAuthStatus();
+    // Delay initial check slightly to ensure cookies are set after login
+    const timer = setTimeout(() => {
+      checkAuthStatus();
+    }, 100);
+    return () => clearTimeout(timer);
   }, [checkAuthStatus]);
 
   // Periodic session validation (every 5 minutes)
@@ -193,6 +197,10 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
           throw new Error('Admin accounts cannot login through the frontend. Please use the admin panel.');
         }
         updateUser(data.user);
+        // Wait a bit for cookie to be set, then verify session
+        setTimeout(() => {
+          checkAuthStatus(false);
+        }, 200);
       } else {
         throw new Error(data.message || 'Login failed');
       }
