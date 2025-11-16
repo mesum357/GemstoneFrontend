@@ -7,6 +7,7 @@ import { CreditCard, Lock, CheckCircle2 } from "lucide-react";
 import { useState } from "react";
 import { useToast } from "@/hooks/use-toast";
 import { useCurrency } from "@/hooks/useCurrency";
+import { getImageUrl } from "@/utils/api";
 
 interface Product {
   _id?: string;
@@ -93,7 +94,7 @@ const PaymentModal = ({ product, open, onOpenChange }: PaymentModalProps) => {
               <h3 className="text-lg font-semibold mb-3">Product Details</h3>
               <div className="border rounded-lg p-4 space-y-4">
                 <img
-                  src={product.image}
+                  src={getImageUrl(product.image)}
                   alt={product.name}
                   className="w-full h-64 object-cover rounded-lg"
                 />

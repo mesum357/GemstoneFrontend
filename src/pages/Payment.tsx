@@ -12,7 +12,7 @@ import { useCurrency } from "@/hooks/useCurrency";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 
-import { API_URL } from '@/utils/api';
+import { API_URL, getImageUrl } from '@/utils/api';
 
 interface PaymentSettings {
   _id?: string;
@@ -267,7 +267,7 @@ const Payment = () => {
                 </CardHeader>
                 <CardContent className="space-y-4">
                   <img
-                    src={product.image}
+                    src={getImageUrl(product.image)}
                     alt={product.name}
                     className="w-full h-64 object-cover rounded-lg"
                   />

@@ -34,7 +34,7 @@ import Footer from "@/components/Footer";
 import { useAuth } from "@/context/AuthContext";
 import { useToast } from "@/hooks/use-toast";
 
-import { API_URL } from '@/utils/api';
+import { API_URL, getImageUrl } from '@/utils/api';
 
 interface Payment {
   _id: string;
@@ -145,7 +145,7 @@ const MyTransactions = () => {
   const handleViewReceipt = (payment: Payment) => {
     // Only allow viewing receipt for verified payments
     if (payment.status === 'verified') {
-      const imageUrl = `${API_URL.replace('/api', '')}${payment.screenshot}`;
+      const imageUrl = getImageUrl(payment.screenshot);
       setReceiptImage(imageUrl);
       setSelectedReceiptPayment(payment);
       setViewReceiptOpen(true);
@@ -403,7 +403,7 @@ const MyTransactions = () => {
                     <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
                       <div className="flex items-center gap-4 flex-1">
                         <img
-                          src={payment.productId?.image}
+                          src={getImageUrl(payment.productId?.image)}
                           alt={payment.productId?.name}
                           className="w-20 h-20 object-cover rounded-lg"
                         />

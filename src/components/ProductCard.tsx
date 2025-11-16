@@ -7,6 +7,7 @@ import { useLikes } from "@/context/LikesContext";
 import { useToast } from "@/hooks/use-toast";
 import { useNavigate } from "react-router-dom";
 import { useCurrency } from "@/hooks/useCurrency";
+import { getImageUrl } from "@/utils/api";
 import ImageModal from "./ImageModal";
 
 interface Product {
@@ -71,7 +72,7 @@ const ProductCard = ({ product }: ProductCardProps) => {
     <div className="product-card group">
       <div className="relative overflow-hidden">
         <img 
-          src={product.image} 
+          src={getImageUrl(product.image)} 
           alt={product.name}
           className="product-image"
         />
@@ -205,7 +206,7 @@ const ProductCard = ({ product }: ProductCardProps) => {
 
       {/* Image Modal */}
       <ImageModal
-        imageUrl={product.image}
+        imageUrl={getImageUrl(product.image)}
         productName={product.name}
         open={showImageModal}
         onOpenChange={setShowImageModal}
