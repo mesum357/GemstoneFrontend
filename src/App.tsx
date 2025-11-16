@@ -15,6 +15,7 @@ import Register from "./pages/Register";
 import ForgotPassword from "./pages/ForgotPassword";
 import Payment from "./pages/Payment";
 import MyTransactions from "./pages/MyTransactions";
+import SessionDebug from "./pages/SessionDebug";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -43,6 +44,7 @@ const App = () => (
             <Route path="/forgot-password" element={<ForgotPassword />} />
             <Route path="/payment/:productId" element={<Payment />} />
             <Route path="/my-transactions" element={<MyTransactions />} />
+            <Route path="/session-debug" element={<SessionDebug />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>
