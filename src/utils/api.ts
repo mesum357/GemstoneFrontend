@@ -1,6 +1,6 @@
 /**
  * Centralized API configuration
- * Ensures all API requests use the correct base URL
+ * Ensures all API requests use the correct base URL and include credentials
  */
 
 // Get the API URL from environment variables, ensuring it ends with /api
@@ -24,6 +24,71 @@ export const API_URL = getApiUrl();
 // Get the backend base URL (without /api) for serving static files like images
 export const getBackendBaseUrl = (): string => {
   return API_URL.replace('/api', '');
+};
+
+/**
+ * Get fetch options with credentials included
+ * Essential for cross-domain cookie transmission
+ */
+export const getFetchOptions = (options: RequestInit = {}): RequestInit => {
+  return {
+    ...options,
+    credentials: 'include' as RequestCredentials, // ESSENTIAL for cross-domain cookies
+    headers: {
+      'Content-Type': 'application/json',
+      'Accept': 'application/json',
+      ...options.headers,
+    },
+  };
+};
+
+/**
+ * Fetch wrapper that ensures credentials are always included
+ */
+export const apiFetch = async (
+  url: string,
+  options: RequestInit = {}
+): Promise<Response> => {
+  // Handle FormData - don't set Content-Type header (browser will set it with boundary)
+  const finalOptions = { ...getFetchOptions(options) };
+  if (options.body instanceof FormData) {
+    const headers = new Headers(finalOptions.headers);
+    headers.delete('Content-Type');
+    finalOptions.headers = headers;
+  }
+  
+  // Construct full URL
+  const fullUrl = url.startsWith('http') ? url : `${API_URL}${url.startsWith('/') ? url : `/${url}`}`;
+  
+  // Log request in development
+  if (import.meta.env.DEV) {
+    console.log('[API Fetch]', options.method || 'GET', fullUrl);
+  }
+  
+  try {
+    const response = await fetch(fullUrl, finalOptions);
+    
+    // Log response in development
+    if (import.meta.env.DEV) {
+      console.log('[API Response]', response.status, fullUrl);
+    }
+    
+    // Handle 401 (session expired)
+    if (response.status === 401) {
+      console.warn('[API] 401 Unauthorized - Session may have expired');
+    }
+    
+    return response;
+  } catch (error: any) {
+    console.error('[API Error]', error.message || 'Network error', fullUrl);
+    
+    // Detect CORS errors
+    if (error.message?.includes('CORS') || error.message?.includes('Failed to fetch')) {
+      console.error('[API] CORS error detected - check backend CORS configuration');
+    }
+    
+    throw error;
+  }
 };
 
 /**
